@@ -67,7 +67,7 @@ void ejercicio2_2() {
   List<double> notas = [8.5, 7.2, 9.1, 6.8, 8.9];
   notas.add(8.3);
   print("Notas " + notas.toString());
-  print("Nota en posición 2: " + notas[1].toString());
+  print("Nota en posición 2: " + notas[2].toString());
   int aprobados = 0;
   double sumaTotal = 0;
   for(int i = 0; i < notas.length; i++) {
