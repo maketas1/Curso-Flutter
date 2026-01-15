@@ -64,6 +64,26 @@ class Tarea {
   String descripcion = '';
   int prioridad = 1; // 1-5
   bool completada = false;
+  DateTime? fechaLimite;
+
+  void setFechaLimite(String fecha) {
+    List<String> partes = fecha.split('/');
+
+    fechaLimite = DateTime(
+      int.parse(partes[2]),
+      int.parse(partes[1]),
+      int.parse(partes[0])
+    );
+  }
+
+  void getFechaLimite() {
+    String fechaFormateada =
+      '${fechaLimite!.day.toString().padLeft(2, '0')}/'
+      '${fechaLimite!.month.toString().padLeft(2, '0')}/'
+      '${fechaLimite!.year}';
+
+    print(fechaFormateada);
+  }
   
   void marcarCompletada() {
     completada = true;
@@ -115,9 +135,21 @@ void ejercicio3() {
   tareas.add(tarea2);
   tareas.add(tarea3);
   tareas.add(tarea4);
-
+  
   tareas[3].marcarCompletada();
   tareas[3].mostrarInfo();
+  
+  print("\nTareas incompletas:");
+  for(Tarea tarea in tareas) {
+    if(tarea.completada == false) {
+      tarea.mostrarInfo();
+    }
+  }
+  
+}
+
+void ejercicio4() {
+
 }
 
 void main() {
