@@ -22,14 +22,14 @@ void arbolito() {
     print('❌ Cantidad inválida');
     return;
   }
-  List<int> primos = [1];
+  List<int> cantidad = [1];
   int contador = 1;
   while(contador < altura) {
-    primos.add(primos[contador-1] + 2);
+    cantidad.add(cantidad[contador-1] + 2);
     contador++;
   }
 
-  double mitadDoecimal = primos[primos.length-1]/2;
+  double mitadDoecimal = cantidad[cantidad.length-1]/2;
   int mitadEntera = mitadDoecimal.toInt();
   int reducida = mitadEntera;
   String maceta = "";
@@ -38,7 +38,7 @@ void arbolito() {
   }
   maceta = "$maceta|||";
   for(int i = 0; i < altura; i++){
-    pintarLinea(reducida, primos[i]);
+    pintarLinea(reducida, cantidad[i]);
     reducida--;
   }
   print(maceta);
