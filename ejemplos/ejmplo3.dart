@@ -55,4 +55,27 @@ void main() {
     if(valor %2 != 0) {valor++; continue;}
     print(valor);
   }
+
+  int diasSemana = 1;
+
+  if (diasSemana <= 0 && diasSemana >= 8) {
+    print("Dian invalido");
+  } else if(diasSemana <= 5) {
+    print("Laborable");
+  } else {
+    print("Fin de semana");
+  }
+
+  String diaSemana = "Lunes";
+  switch(diaSemana.toLowerCase()) {
+    case "lunes" || "martes" || "miercoles" || "jueves" || "viernes":
+      print("Dia laboral");
+      break;
+    case "sabado" ||"domingo":
+      print("Dia no laboral");
+      break;
+    default:
+    print("Valor no permitido");
+    break;
+  }
 }
