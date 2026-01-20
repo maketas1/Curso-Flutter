@@ -117,9 +117,17 @@ void ejercicio2() {
   for(String palabra in palabras) {
     List<String> cadena = palabra.split("");
     if(cadena.length < min) {
-      
+      min = cadena.length;
+      palabraMasCorta = palabra;
+    } else if(cadena.length > max) {
+      max = cadena.length;
+      palabraMasLarga = palabra;
     }
   }
+
+  print("📏 ANÁLISIS DE PALABRAS:");
+  print("✓ Palabra más larga: $palabraMasLarga ($max letras)");
+  print("✓ Palabra más corta: $palabraMasCorta ($min letras)");
 
   print("🔤 CONTEO DE VOCALES:");
   print('''
