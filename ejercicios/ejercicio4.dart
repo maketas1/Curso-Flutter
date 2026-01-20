@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 void pintar(var producto, var cantidad) {
   print("Producto: ${producto.key}");
   print("Precio unitario: ${producto.value}");
@@ -139,9 +142,66 @@ u: $u veces
 ''');
 }
 
+void pistas(int opcion) {
+  switch(opcion){
+    case 1:
+      print("💡 Pista: El número es más alto");
+      break;
+    case 2:
+      print("💡 Pista: El número es más bajo");
+      break;
+    default:
+      break;
+  }
+}
+
+void adivinado(int intentos) {
+  if(intentos == 1 || intentos == 2) {
+    print("🏆 ¡Excelente!");
+  } else if(intentos == 3 || intentos == 4) {
+    print("🥈 ¡Muy bien!");
+  } else if(intentos >= 5 && intentos <= 7) {
+    print("🥉 ¡Lo lograste!");
+  }
+  print("Número de intentos: $intentos/7");
+}
+
+void ejercicio3() {
+  int numAleatorio = Random().nextInt(50) + 1;
+  print(numAleatorio);
+  print("Juego de adivinanza");
+  print("🎯 Tienes 7 intentos");
+  int intentos = 0;
+  externo:
+  for(int i = 1; i <= 7; i++) {
+    intentos++;
+    print("Intento #$i: ");
+    String? entradaStr = stdin.readLineSync();
+    int? entrada = int.tryParse(entradaStr ?? '0');
+    if(entrada == numAleatorio) {
+      adivinado(intentos);
+      break externo;
+    }
+
+    if(entrada! < numAleatorio) {
+      pistas(1);
+    } else if(entrada! > numAleatorio) {
+      pistas(2);
+    }
+  }
+
+  if(intentos == 7) {
+    print("--------------------");
+    print("❌ ¡Se acabaron los intentos!");
+    print("El número secreto era: $numAleatorio");
+  }
+}
+
 void main() {
   print("Ejercicio 1");
   ejericicio1();
   print("Ejercicio 2");
   ejercicio2();
+  print("Ejercicio 3");
+  ejercicio3();
 }
