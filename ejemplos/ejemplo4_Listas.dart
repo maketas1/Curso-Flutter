@@ -208,6 +208,8 @@ void main() {
   print("La lista contiene Go? ${lenguajes.contains("Go")}");
   print("La lista contiene Go? ${lenguajes.containsIgnoreCase("Go")}");
 
+  valores = [1, 2, 3, 4, 5, 18, -9, 10, 5, 12, 14];
+  print("Where + reduce ${valores.where((x) => x%2 ==0).reduce((x,y)=>x+1)}");
 }
 
 extension StringListExtension on List<String> {
