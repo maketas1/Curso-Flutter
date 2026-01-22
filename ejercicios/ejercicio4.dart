@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 void mostrarTodos(List<String> tareas) {
   if(tareas.isEmpty == true) {
@@ -224,7 +225,37 @@ void ejercicio5() {
     return;
   }
 
-  
+  List<String> palabras = texto.split(" ");
+
+  print('\n═══ ANÁLISIS ═══');
+  print('Total de palabras: ${palabras.length}');
+
+  String masLarga = palabras.reduce((a, b) => a.length < b.length ? b : a);
+  print('Palabra más larga: $masLarga (${masLarga.length} letras)');
+  String masCorta = palabras.reduce((a, b) => a.length > b.length ? b : a);
+  print('Palabra más corta: $masCorta (${masCorta.length} letras)');
+
+  var sinDuplicados = palabras.toSet().toList();
+  print("Sin duplicados: ${sinDuplicados.length} palabras unicas");
+
+  var ordenAlfabetico = List<String>.from(palabras);
+  ordenAlfabetico.sort();
+  print("Orden alfabetico: $ordenAlfabetico");
+
+  var masDe5 = palabras.where((palabra) => palabra.length > 5).toList();
+  print("Palabras de mas de 5 letras: $masDe5");
+
+  var conVocal = palabras.where((p) {
+    var primera = p.toLowerCase()[0];
+    return 'aeiou'.contains(primera);
+  });
+  print('Palabras que empiezan con vocal: ${conVocal.length}');
+
+  var invertidas = palabras.reversed.toList();
+  print('Invertidas: $invertidas');
+
+  var textoInvertido = invertidas.join(' ');
+  print('Texto invertido: $textoInvertido');
 }
 
 void main() {
