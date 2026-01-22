@@ -121,21 +121,71 @@ void ejercicio2() {
   }
 
   double promedio = calificaciones.isEmpty ? 0 : calificaciones.reduce((a, b) => a + b) / calificaciones.length;
-  print("Promedio: $promedio");
 
   double notaMax = calificaciones.isEmpty ? 0 : calificaciones.reduce((a, b) => a < b ? b : a);
   double notaMin = calificaciones.isEmpty ? 0 : calificaciones.reduce((a, b) => a > b ? b : a);
-  print("Nota maxima: $notaMax");
-  print("Nota minima: $notaMin");
 
   var aprobadas = calificaciones.where((nota) => nota >= 5);
-  print("Nº aprobadas: ${aprobadas.length}");
 
-  var sobreasalientes = calificaciones.where((nota) => nota >= 9);
-  print("Nº sobreasalientes: ${sobreasalientes.length}");
+  var sobresalientes = calificaciones.where((nota) => nota >= 9);
 
-  calificaciones.sort();
-  print(calificaciones);
+  var ordenadas = List<double>.from(calificaciones);
+  ordenadas.sort();
+  
+  var descendente = List<double>.from(calificaciones);
+  descendente.sort((a, b) => b.compareTo(a));
+
+  print("=== Resultados ===");
+  print('Calificaciones: $calificaciones');
+  print('Promedio: ${promedio.toStringAsFixed(2)}');
+  print('Máxima: $notaMax');
+  print('Mínima: $notaMin');
+  print('Aprobadas: ${aprobadas.length}');
+  print('Sobresalientes: ${sobresalientes.length}');
+  print('Ordenadas (↑): $ordenadas');
+  print('Ordenadas (↓): $descendente');
+}
+
+void ejercicio3() {
+  print('╔═══════════════════════════════════════╗');
+  print('║  MANIPULADOR DE LISTAS                ║');
+  print('╚═══════════════════════════════════════╝\n');
+  
+  var numeros = List<int>.generate(20, (index) => index + 1);
+  print('Lista original: $numeros\n');
+
+  print('═══ MAP (transformar) ═══');
+  var duplicado = numeros.map((numero) => numero * 2).toList();
+  print("Duplicados: $duplicado");
+
+  var cuadrados = numeros.map((numero) => numero * numero).toList();
+  print("Cuadrados: $cuadrados");
+
+  var negativos = numeros.map((numero) => -numero).toList();
+  print("Negativos: $negativos");
+
+  print('\n═══ WHERE (filtrar) ═══');
+  var pares = numeros.where((numero) => numero % 2 == 0).toList();
+  print("Pares: $pares");
+
+  var mayores10 = numeros.where((numero) => numero > 50).toList();
+  print("Nº mayores que 50: $mayores10");
+
+  var multiplos3 = numeros.map((numero) => numero % 3 == 0);
+  print("Nº multiplos de 3: $multiplos3");
+
+  print('\n═══ ANY y EVERY (verificar) ═══');
+  
+  bool mayores50 = numeros.any((numero) => numero > 50);
+  print("¿Hay nº mayores que 50? $mayores50");
+
+  bool menores100 = numeros.every((numero) => numero < 100);
+  print("¿Hay nº menores que 100? $menores100");
+
+  print('\n═══ EXPAND (expandir) ═══');
+  var expandida = numeros.expand((numero) => [numero, numero]).toList();
+  print("Lista expandida: $expandida");
+
 }
 
 void main() {
@@ -144,4 +194,7 @@ void main() {
 
   print("Ejercicio 2");
   ejercicio2();
+
+  print("Ejercicio 3");
+  ejercicio3();
 }
