@@ -255,6 +255,7 @@ void ejercicio5() {
 
   var textoInvertido = invertidas.join(' ');
   print('Texto invertido: $textoInvertido');
+
 }
 
 void main() {
