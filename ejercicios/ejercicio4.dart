@@ -211,6 +211,22 @@ void ejercicio4() {
   }
 }
 
+void ejercicio5() {
+  print('╔═══════════════════════════════════════╗');
+  print('║     PROCESADOR DE TEXTO               ║');
+  print('╚═══════════════════════════════════════╝\n');
+  
+  stdout.write('Ingresa un texto: ');
+  String? texto = stdin.readLineSync();
+  
+  if (texto == null || texto.isEmpty) {
+    print('❌ No ingresaste texto');
+    return;
+  }
+
+  
+}
+
 void main() {
   print("Ejercicio 1");
   ejercicio1();
@@ -223,6 +239,9 @@ void main() {
 
   print("Ejercicio 4");
   ejercicio4();
+
+  print("Ejercicio 5");
+  ejercicio5();
 }
 
 class Inventario {
