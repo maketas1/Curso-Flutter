@@ -227,7 +227,7 @@ void ejercicio5() {
     return;
   }
 
-  List<String> palabras = texto.split(" ");
+  List<String> palabras = texto.toLowerCase().split(" ");
 
   print('\n═══ ANÁLISIS ═══');
   print('Total de palabras: ${palabras.length}');
