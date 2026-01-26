@@ -103,13 +103,13 @@ void ejercicio2() {
 
 String redundancia() {
   print("Escriba el nombre del contacto");
-  String nombre = stdin.readLineSync() ?? "";
+  String nombre = stdin.readLineSync()?.trim() ?? "";
   return nombre;
 }
 
 String redundancia1() {
   print("Escriba el nº de telefono");
-  String telefono = stdin.readLineSync() ?? "";
+  String telefono = stdin.readLineSync()?.trim() ?? "";
   return telefono;
 }
 
