@@ -31,6 +31,7 @@ void ejercicio1() {
     }
     duplicado1.remove(sorteo);
     contador++;
+    sleep(const Duration(milliseconds: 400));
   }
   print("Se han hacertado todos los numeros en la bola nº $contador");
   print("Numeros restantes para terminar el bombo: $duplicado1");
@@ -124,5 +125,5 @@ void main() {
   ejercicio1();
 
   print("Ejercicio 2");
-  ejercicio2();
+  //ejercicio2();
 }
