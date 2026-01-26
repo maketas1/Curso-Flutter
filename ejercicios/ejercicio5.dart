@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 void ejercicio1() {
@@ -34,7 +35,94 @@ void ejercicio1() {
   print("Se han hacertado todos los numeros en la bola nº $contador");
   print("Numeros restantes para terminar el bombo: $duplicado1");
 }
+
+void ejercicio2() {
+  Map<String, String> contactos = {};
+  bool exit = false;
+  while(exit == false) {
+    print('''
+=======Menú=======
+1. Añadir contacto
+2. Buscar contacto
+3. Modificar contaco
+4. Eliminar contacto
+5. Exit''');
+    String? opcionStr = stdin.readLineSync();
+    int? opcion = int.tryParse(opcionStr ?? '0');
+    switch(opcion) {
+      case 1:
+        String nombre = redundancia();
+        String telefono = redundancia1();
+        if(formato(telefono) == false) {
+          print("No se ha podido insertar");
+          print("Formato del telefono incorrecto");
+          break;
+        }
+        contactos.putIfAbsent(nombre, () => telefono);
+        print(contactos);
+        break;
+      case 2: 
+        String nombre = redundancia();
+        bool existe = false;
+        for(var key in contactos.keys) {
+          if(key == nombre) {
+            print("El telefono del contacto es: ${contactos[key]}");
+            existe = true;
+          }
+        }
+        if(existe == false) {
+          print("El contacto indicado no existe");
+        }
+        break;
+      case 3:
+        String nombre = redundancia();
+        String telefono = redundancia1();
+        if(formato(telefono) == false) {
+          print("No se ha podido insertar");
+          print("Formato del telefono incorrecto");
+          break;
+        }
+        contactos.update(nombre, (_) => telefono);
+        print("Contacto actualizado");
+        break;
+      case 4:
+        print(contactos);
+        String nombre = redundancia();
+        contactos.remove(nombre);
+        print("Contacto eliminado");
+        break;
+      case 5:
+        exit = true;
+        break;
+      default:
+        print("Opcion no valida");
+        break;
+    }
+  }
+}
+
+String redundancia() {
+  print("Escriba el nombre del contacto");
+  String nombre = stdin.readLineSync() ?? "";
+  return nombre;
+}
+
+String redundancia1() {
+  print("Escriba el nº de telefono");
+  String telefono = stdin.readLineSync() ?? "";
+  return telefono;
+}
+
+bool formato(String telefono) {
+  RegExp regExp = RegExp("r\d{3}-\d{2}-\d{2}-\d{2}");
+  bool formato = regExp.hasMatch(telefono);
+  return formato;
+}
+
 void main() {
   print("Ejercicio 1");
   ejercicio1();
+
+  print("Ejercicio 2");
+  ejercicio2();
 }
