@@ -47,7 +47,34 @@ void aplicarFuncion(int valor, int Function(int) funcion) {
   print("Resultado: ${funcion(valor)}");
 }
 
-//Funcion que devuelve otra funcion (closure)
+//Funcion que devuelve otra funcion (closure - clausura)
+Function multiplicador(int n) {
+  return (int x) => x * n;
+}
+
+//Funcion recursiva. funcion que se llama a si misma
+int factorial(int n) {
+  if(n <= 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+//Funcion anidada
+void funcionExterna() {
+  void interna() {
+    print("Soy una funcion interna");
+  }
+  interna();
+}
+
+//Funciones dinamicas puede retornar diversos tipos
+dynamic sumaDinamica(a, b) => a + b;
+
+//Funciones de orden superior
+List<int> operarLista(List<int> lista, int Function(int) operacion) {
+  return lista.map(operacion).toList();
+}
 
 void main() {
   dartSludar();
@@ -66,4 +93,19 @@ void main() {
   print("Triple de 288: ${triple(288)}");
   aplicarFuncion(15, cuadrado);
   aplicarFuncion(1000, triple2);
+  var por5 = multiplicador(5);
+  int resultado = por5(6);
+  print("Resultado de 6 X 5: $resultado");
+  var por2 = multiplicador(2);
+  print("Multiplicador 2x20: ${por2(20)}");
+  print("Multiplicar 5x20: ${multiplicador(5)(20)}");
+  print("Factorial de 5: ${factorial(5)}");
+  funcionExterna();
+  print(sumaDinamica(2, 3));
+  print(sumaDinamica(2.4, 3));
+  print(sumaDinamica("Hola", " Ángel"));
+  print(sumaDinamica([2, 3, 4], [5, 6, 7]));
+  print(sumaDinamica("Hola ", 3.toString()));
+  print(operarLista([1, 2, 3], cuadrado));
+  print(operarLista([5, 10, 15], (x) => x + 3));
 }
