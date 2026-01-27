@@ -105,6 +105,15 @@ int combinar(List<int> lista, int Function(int , int) combinador) {
   return resultado;
 }
 
+  dynamic procesarLista(List<int> lista, List<Function> funciones) {
+    dynamic resultado = lista;
+    for(var funcion in funciones) {
+      resultado = funcion(resultado);
+      print(resultado);
+    }
+    return resultado;
+  }
+
 void ejercicio2() {
   var numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
   print(numeros);
@@ -113,6 +122,12 @@ void ejercicio2() {
   print("Par: ${filtrarPor(numeros, esPar)}");
   print("Combinador: ${combinar(numeros, sumarTodos)}");
 
+  var resultado = procesarLista(numeros, [
+    (lista) => filtrarPor(lista, esPar),
+    (lista) => aplicarOperacion(lista, duplicar),
+    (lista) => combinar(lista, sumarTodos)
+  ]);
+  print(resultado);
 }
 
 void main() {
