@@ -88,11 +88,21 @@ List<int> aplicarOperacion(List<int> lista, int Function(int) operacion) {
   return lista.map(operacion).toList();
 }
 
+List<int> filtrarPor(List<int> lista, bool Function(int) condicion) {
+  List<int> resultado = [];
+  for(var elemento in lista) {
+    if(condicion(elemento)) resultado.add(elemento);
+  }
+  //return resultado;
+  return lista.where(condicion).toList();
+}
+
 void ejercicio2() {
   var numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
   print(numeros);
   print("Duplicados: ${aplicarOperacion(numeros, duplicar)}");
-  print("Duplicados: ${aplicarOperacion(numeros, cuadrado)}");
+  print("Cuadrados: ${aplicarOperacion(numeros, cuadrado)}");
+  print("Par: ${filtrarPor(numeros, esPar)}");
 }
 
 void main() {
