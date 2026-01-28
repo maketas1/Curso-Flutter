@@ -104,6 +104,11 @@ class Auto {
       print("Conductor: ${conductor!.info()}");
     }
   }
+
+  void asignarConductor(Conductor c) {
+    conductor = c;
+    print("Conductor asignado ${c.nombre}");
+  }
 } 
 
 void main() {
