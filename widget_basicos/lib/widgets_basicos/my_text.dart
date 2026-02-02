@@ -1,40 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:widget_basicos/widgets_basicos/my_container.dart';
-import 'package:widget_basicos/widgets_basicos/my_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(MainApp());
-}
+class MyText extends StatelessWidget {
+  MyText({super.key});
 
-class MainApp extends StatelessWidget {
-  MainApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // home: MyText(),
-      home: MyContainer(titulo: "Mi container"),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          width: 400,
+          height: 400,
+          child: Column(            
+            children: [
+              miTexto,
+              richText,
+              miTextRich,
+              miTextFamily,
+              miTextFamilyPersonalizado
+            ],
+          ),
+        ),
+      ),
     );
   }
-}
-/*
-      Scaffold(
-        appBar: AppBar(title: Text(titulo ?? "Sin título")),
-        body: Center(
-          child: Container(
-            //alignment: AlignmentGeometry.center,
-            width: double.maxFinite,
-            height: 200,
-            // width: null, por defecto. Se adapta al contenido
-            // height: null, por defecto. Se adapta al contenido
-            decoration: BoxDecoration(color: Colors.blue, 
-            border: Border.all(
-              color:Colors.orange, width: 15, //Seguir aquí
-            )),
-            // color: Colors.yellow,
-            padding: EdgeInsets.all(20),
-            margin: EdgeInsets.only(left: 20, right: 40),
-            child: Text(
+
+
+//Tipografias. 
+//Google Font.
+Text miTextFamily = Text("Hola, España", style: GoogleFonts.laBelleAurore(fontSize: 20));
+
+//Fuentes personalizadas. https://www.dafont.com/es
+//Extensiones permitidas: ttf y otf.
+Text miTextFamilyPersonalizado = Text(
+  "Hola desde mi fuente personalizado",
+  style: TextStyle(
+    fontFamily: "MyFuente",
+    fontSize: 40,
+  ),
+);
+
+
+var richText = RichText(text: TextSpan(
+  text: "Esto es un texto con",
+  style: TextStyle(color: Colors.black, fontSize: 16),
+  children: [
+    TextSpan(text: " negrita", style: TextStyle(fontWeight: FontWeight.bold)),
+    TextSpan(text: " incluida"),
+  ]
+));
+
+Text miTextRich = Text.rich(TextSpan(
+  text: "Esto es otro texto con",
+  style: TextStyle(color: Colors.black, fontSize: 16),
+  children: [
+    TextSpan(text: " negrita", style: TextStyle(fontWeight: FontWeight.bold)),
+    TextSpan(text: " incluida"),
+  ]
+));
+
+Text miTexto = Text(
               "Hola mundo, lorem ipsum dsfasdfafadsfasdfdsafdsffasdf",
               textAlign: TextAlign.left, //Centrado del texto
               textDirection: TextDirection.ltr,
@@ -47,18 +72,12 @@ class MainApp extends StatelessWidget {
               //overflow: TextOverflow.clip, //Corta el texto
               overflow: TextOverflow.fade,
               //style: miEstilo2,
-              /*style: TextStyle(
+              style: TextStyle(
                 fontSize: 30,
-              )*/
-              style: estilo,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+              )
+              // style: miEstilo,
+            );
 }
-
 TextStyle miEstilo = TextStyle(
   fontSize: 30,
   fontWeight: FontWeight.w900,
@@ -86,5 +105,3 @@ TextStyle miEstilo = TextStyle(
     ),
   ],
 );
-
-*/
