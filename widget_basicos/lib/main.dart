@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_basicos/widgets_basicos/my_col_row_stack.dart';
 import 'package:widget_basicos/widgets_basicos/my_container.dart';
 import 'package:widget_basicos/widgets_basicos/my_text.dart';
 
@@ -13,7 +14,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: MyText(),
-      home: MyContainer(titulo: "Mi container"),
+      // home: MyContainer(titulo: "Mi container"),
+      home: MyColRowStack(),
     );
   }
 }
