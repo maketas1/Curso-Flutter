@@ -1,3 +1,4 @@
+import 'package:ejercicios_flutter/Ejercicios_2/ejercicio2.dart';
 import 'package:ejercicios_flutter/ejercicios_1/ejercicio1.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: MyText(),
-      home: ejercicio1(),
+      // home: ejercicio1(),
+      home: Ejercicio2(),
     );
   }
 }
