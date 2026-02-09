@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:widget_basicos/widgets_basicos/dia9/dia_9_2.dart';
+import 'package:widget_basicos/widgets_basicos/dia9/my_images.dart';
+import 'package:widget_basicos/widgets_basicos/dia9/my_scaffold.dart';
+import 'package:widget_basicos/widgets_basicos/dia9/my_snackbar.dart';
 import 'package:widget_basicos/widgets_basicos/my_col_row_stack.dart';
 import 'package:widget_basicos/widgets_basicos/my_container.dart';
 import 'package:widget_basicos/widgets_basicos/my_statefull.dart';
@@ -219,7 +223,13 @@ class MainApp extends StatelessWidget {
       //home: MyFlex(),
       //home: MyBasicWidgets(),
       //home: StatisticsDashboard(),
-      home: ListaDinamica(),
+      // home: Dia92(),
+      routes: { //Rutas nombradas
+        '/' : (context) => Dia92(), //Donde entra la aplicacion. Incompatible con home
+        '/snackbar' : (context) => MySnackBar(),
+        '/scaffold' : (context) => MyScaffold(),
+        '/images' : (context) => MyImages()
+      },
     );
   }
 }
