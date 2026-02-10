@@ -49,7 +49,14 @@ class Dia92 extends StatelessWidget {
               height: 20,
             ),
             MyNavigationButton(icon: Icons.view_quilt, title: "Imagenes", description: "Imagenes", color: Colors.blueAccent, routeName: '/images', context: context),
-            
+            SizedBox(
+              height: 20,
+            ),
+            MyNavigationButton(icon: Icons.view_quilt, title: "Imagenes1", description: "Imagenes1", color: Colors.blueAccent, routeName: '/images1', context: context),
+            SizedBox(
+              height: 20,
+            ),
+            MyNavigationButton(icon: Icons.view_quilt, title: "ListView", description: "ListView", color: Colors.blueAccent, routeName: '/listview', context: context),
           ],
         ),
       ),
