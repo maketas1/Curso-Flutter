@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:widget_basicos/widgets_basicos/dia11/dia_11_persistencia.dart';
+import 'package:widget_basicos/widgets_basicos/dia11/hive_ejemplo.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/dia_9_2.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/my_images.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/my_images2.dart';
@@ -10,7 +12,9 @@ import 'package:widget_basicos/widgets_basicos/my_container.dart';
 import 'package:widget_basicos/widgets_basicos/my_statefull.dart';
 import 'package:widget_basicos/widgets_basicos/my_text.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AlmacenamientoHive.inicializar();
   runApp(MainApp());
 }
 
@@ -226,14 +230,15 @@ class MainApp extends StatelessWidget {
       //home: MyBasicWidgets(),
       //home: StatisticsDashboard(),
       // home: Dia92(),
-      routes: { //Rutas nombradas
-        '/' : (context) => Dia92(), //Donde entra la aplicacion. Incompatible con home
-        '/snackbar' : (context) => MySnackBar(),
-        '/scaffold' : (context) => MyScaffold(),
-        '/images' : (context) => MyImages(),
-        '/images1' : (context) => MyImages2(),
-        '/listview' : (context) => MiListViewEjemplos()
-      },
+      // routes: { //Rutas nombradas
+      //   '/' : (context) => Dia92(), //Donde entra la aplicacion. Incompatible con home
+      //   '/snackbar' : (context) => MySnackBar(),
+      //   '/scaffold' : (context) => MyScaffold(),
+      //   '/images' : (context) => MyImages(),
+      //   '/images1' : (context) => MyImages2(),
+      //   '/listview' : (context) => MiListViewEjemplos()
+      // },
+      home: Dia11Persistencia(),
     );
   }
 }
