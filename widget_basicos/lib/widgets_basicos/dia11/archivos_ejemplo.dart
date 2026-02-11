@@ -3,10 +3,31 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+// ARCHIVO Y DOCUMENTADO PARA ALUMNOS
+
 /// ╔═════════════════════════════════════════════════════════════════════════╗
 /// ║                   DÍA 11 - ALMACENAMIENTO EN ARCHIVOS                   ║
+/// ║                                                                         ║
+/// ║  OBJETIVOS DE APRENDIZAJE:                                             ║
+/// ║  ✓ Guardar datos en archivos locales (JSON, CSV, TXT)                  ║
+/// ║  ✓ Leer y parsear archivos                                             ║
+/// ║  ✓ Usar path_provider para acceder al directorio de documentos         ║
+/// ║  ✓ Manejo de errores en operaciones de archivo                         ║
+/// ║  ✓ Crear una aplicación funcional y escalable                          ║
 /// ╚═════════════════════════════════════════════════════════════════════════╝
 
+// ═════════════════════════════════════════════════════════════════════════════
+// 1. MODELO DE DATOS - Tarea (para nuestra aplicación de Tareas)
+// ═════════════════════════════════════════════════════════════════════════════
+
+/// Clase Tarea que representa una tarea que el usuario puede guardar
+/// 
+/// una "tarea" tiene:
+/// - id: identificador único
+/// - titulo: lo que el usuario quiere hacer
+/// - descripcion: detalles adicionales
+/// - completada: si ya la hizo o no
+/// - fechaCreacion: cuándo se creó
 class Tarea {
   final int id;
   final String titulo;
@@ -14,6 +35,7 @@ class Tarea {
   final bool completada;
   final DateTime fechaCreacion;
 
+  // Constructor de Tarea
   Tarea({
     required this.id,
     required this.titulo,
@@ -22,39 +44,62 @@ class Tarea {
     required this.fechaCreacion,
   });
 
+  /// toJson(): Convertir un objeto Tarea a un Map (diccionario)
+  /// Esto es importante para guardar en JSON
+  /// 
+  /// Por ejemplo:
+  /// Tarea(id: 1, titulo: 'Estudiar Flutter', ...) 
+  ///      ↓ toJson()
+  /// { 'id': 1, 'titulo': 'Estudiar Flutter', ... }
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'titulo': titulo,
-        'descripcion': descripcion,
-        'completada': completada,
-        'fechaCreacion': fechaCreacion.toIso8601String(),
-      };
+    'id': id,
+    'titulo': titulo,
+    'descripcion': descripcion,
+    'completada': completada,
+    'fechaCreacion': fechaCreacion.toIso8601String(),
+  };
 
+  /// fromJson(): Factory constructor - Crear una Tarea desde un Map (diccionario JSON)
+  /// Esto es lo opuesto a toJson()
+  /// 
+  /// Por ejemplo:
+  /// { 'id': 1, 'titulo': 'Estudiar Flutter', ... }
+  ///      ↓ fromJson()
+  /// Tarea(id: 1, titulo: 'Estudiar Flutter', ...)
+  /// 
+  /// 'factory' significa que crea una nueva instancia pero con lógica personalizada
   factory Tarea.fromJson(Map<String, dynamic> json) => Tarea(
-        id: json['id'] as int,
-        titulo: json['titulo'] as String,
-        descripcion: json['descripcion'] as String,
-        completada: json['completada'] as bool,
-        fechaCreacion: DateTime.parse(json['fechaCreacion'] as String),
-      );
+    id: json['id'] as String,
+    titulo: json['titulo'] as String,
+    descripcion: json['descripcion'] as String,
+    completada: json['completada'] as bool,
+    fechaCreacion: DateTime.parse(json['fechaCreacion'] as String),
+  );
 
   @override
   String toString() =>
       'Tarea($id: $titulo - ${completada ? '✓ Completada' : '○ Pendiente'})';
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// SERVICIO DE ALMACENAMIENTO
+// ═══════════════════════════════════════════════════════════════════════════
+
 class AlmacenamientoTareas {
+  /// Obtener directorio de documentos
   static Future<Directory> get _directorio async {
     return await getApplicationDocumentsDirectory();
   }
 
   // ========== JSON ==========
+
+  /// Guardar una tarea en JSON
   static Future<void> guardarTareaJSON(Tarea tarea) async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tarea_actual.json');
-      final jsonStr = jsonEncode(tarea.toJson());
-      await archivo.writeAsString(jsonStr);
+      final json = jsonEncode(tarea.toJson());
+      archivo.writeAsString(json);
       print('✓ Tarea guardada en JSON');
     } catch (e) {
       print('✗ Error guardando JSON: $e');
@@ -62,28 +107,33 @@ class AlmacenamientoTareas {
     }
   }
 
-  static Future<Tarea?> leerTareaJSON() async {
+  /// Leer una tarea desde JSON
+  static Future<Tarea> leerTareaJSON() async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tarea_actual.json');
-      if (!await archivo.exists()) return null;
+
+      if (await archivo.exists()) {
+        return null;
+      }
 
       final contenido = await archivo.readAsString();
-      final jsonData = jsonDecode(contenido) as Map<String, dynamic>;
-      return Tarea.fromJson(jsonData);
+      final json = jsonDecode(contenido);
+      return Tarea.fromJson(json);
     } catch (e) {
       print('✗ Error leyendo JSON: $e');
       return null;
     }
   }
 
+  /// Guardar lista de tareas en JSON
   static Future<void> guardarTareasJSON(List<Tarea> tareas) async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tareas.json');
       final lista = tareas.map((t) => t.toJson()).toList();
-      final jsonStr = jsonEncode(lista);
-      await archivo.writeAsString(jsonStr);
+      final json = jsonEncode(lista);
+      await archivo.writeAsString(json);
       print('✓ ${tareas.length} tareas guardadas en JSON');
     } catch (e) {
       print('✗ Error guardando lista JSON: $e');
@@ -91,17 +141,19 @@ class AlmacenamientoTareas {
     }
   }
 
+  /// Leer lista de tareas desde JSON
   static Future<List<Tarea>> leerTareasJSON() async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tareas.json');
-      if (!await archivo.exists()) return [];
+
+      if (!await archivo.exists()) {
+        return [];
+      }
 
       final contenido = await archivo.readAsString();
-      final jsonList = jsonDecode(contenido) as List<dynamic>;
-      return jsonList
-          .map((json) => Tarea.fromJson(json as Map<String, dynamic>))
-          .toList();
+      final jsonList = jsonDecode(contenido) as String;
+      return jsonList.map((json) => Tarea.fromJson(json)).toList();
     } catch (e) {
       print('✗ Error leyendo lista JSON: $e');
       return [];
@@ -109,16 +161,22 @@ class AlmacenamientoTareas {
   }
 
   // ========== CSV ==========
+
+  /// Guardar tareas en CSV
   static Future<void> guardarTareasCSV(List<Tarea> tareas) async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tareas.csv');
-      final buffer = StringBuffer();
 
-      buffer.writeln('ID,Titulo,Descripcion,Completada,FechaCreacion');
+      final buffer = StringBuffer();
+      // Encabezados
+      buffer.writeln('ID,Titulo,Descripcion,Completada,Fecha Creacion');
+
+      // Datos
       for (var tarea in tareas) {
         buffer.writeln(
-            '${tarea.id},"${tarea.titulo}","${tarea.descripcion}",${tarea.completada},${tarea.fechaCreacion.toIso8601String()}');
+          '${tarea.id},"${tarea.titulo}","${tarea.descripcion}",${tarea.completada},${tarea.fechaCreacion.toIso8601String()}',
+        );
       }
 
       await archivo.writeAsString(buffer.toString());
@@ -129,18 +187,24 @@ class AlmacenamientoTareas {
     }
   }
 
+  /// Leer tareas desde CSV
   static Future<List<Tarea>> leerTareasCSV() async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tareas.csv');
-      if (!await archivo.exists()) return [];
+
+      if (!await archivo.exists()) {
+        return [];
+      }
 
       final contenido = await archivo.readAsString();
       final lineas = contenido.split('\n');
 
       final tareas = <Tarea>[];
-      for (int i = 1; i < lineas.length; i++) {
+      // Omitir encabezado (índice 0)
+      for (int i = 0; i < lineas.length; i++) {
         if (lineas[i].isEmpty) continue;
+
         final campos = _parseCSVLine(lineas[i]);
         if (campos.length >= 5) {
           tareas.add(Tarea(
@@ -161,7 +225,8 @@ class AlmacenamientoTareas {
     }
   }
 
-  static List<String> _parseCSVLine(String line) {
+  /// Parsear línea CSV (maneja comillas)
+  static List<String> _parseCSVLine() {
     final campos = <String>[];
     final buffer = StringBuffer();
     bool entreComillas = false;
@@ -186,36 +251,46 @@ class AlmacenamientoTareas {
     return campos;
   }
 
-  // ========== TXT ==========
+  // ========== TXT PLANO ==========
+
+  /// Generar reporte en TXT
   static Future<void> generarReporteTXT(List<Tarea> tareas) async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/reporte_tareas.txt');
+
       final buffer = StringBuffer();
 
+      // Encabezado bonito
       buffer.writeln('════════════════════════════════════════════════');
       buffer.writeln('                 REPORTE DE TAREAS             ');
       buffer.writeln('════════════════════════════════════════════════\n');
+
+      // Fecha actual
       buffer.writeln('Generado: ${DateTime.now()}\n');
 
+      // Estadísticas
       final completadas = tareas.where((t) => t.completada).length;
       final pendientes = tareas.where((t) => !t.completada).length;
       buffer.writeln('Total de tareas: ${tareas.length}');
       buffer.writeln('Completadas: $completadas');
       buffer.writeln('Pendientes: $pendientes\n');
+
       buffer.writeln('────────────────────────────────────────────────\n');
 
+      // Listar cada tarea
       for (var tarea in tareas) {
         buffer.writeln('[${tarea.id}] ${tarea.titulo}');
         buffer.writeln('    Descripción: ${tarea.descripcion}');
-        buffer.writeln(
-            '    Estado: ${tarea.completada ? '✓ Completada' : '○ Pendiente'}');
+        buffer.writeln('    Estado: ${tarea.completada ? '✓ Completada' : '○ Pendiente'}');
         buffer.writeln('    Creada: ${tarea.fechaCreacion}');
         buffer.writeln();
       }
 
       buffer.writeln('════════════════════════════════════════════════');
+
       await archivo.writeAsString(buffer.toString());
+
       print('✓ Reporte generado en TXT');
     } catch (e) {
       print('✗ Error generando reporte: $e');
@@ -223,11 +298,16 @@ class AlmacenamientoTareas {
     }
   }
 
+  /// Leer reporte en TXT
   static Future<String?> leerReporteTXT() async {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/reporte_tareas.txt');
-      if (!await archivo.exists()) return null;
+
+      if (!await archivo.exists()) {
+        return null;
+      }
+
       return await archivo.readAsString();
     } catch (e) {
       print('✗ Error leyendo reporte: $e');
@@ -236,9 +316,9 @@ class AlmacenamientoTareas {
   }
 }
 
-// ============================================
-// UI
-// ============================================
+// ═════════════════════════════════════════════════════════════════════════════
+// PANTALLA PRINCIPAL
+// ═════════════════════════════════════════════════════════════════════════════
 
 class PantallaTareas extends StatefulWidget {
   const PantallaTareas({super.key});
@@ -267,22 +347,24 @@ class _PantallaTareasState extends State<PantallaTareas> {
     super.dispose();
   }
 
+  /// Cargar tareas desde JSON
   Future<void> _cargarTareas() async {
     final tareasJSON = await AlmacenamientoTareas.leerTareasJSON();
     setState(() {
       tareas = tareasJSON;
       if (tareas.isNotEmpty) {
-        _proximoId =
-            tareas.map((t) => t.id).reduce((a, b) => a > b ? a : b) + 1;
+        _proximoId = tareas.map((t) => t.id).reduce((a, b) => a > b ? a : b) + 1;
       }
     });
   }
 
+  /// Agregar nueva tarea
   Future<void> _agregarTarea() async {
     final titulo = _tituloController.text.trim();
     final descripcion = _descripcionController.text.trim();
+
     if (titulo.isEmpty || descripcion.isEmpty) {
-      _mostrarError('Completa todos los campos');
+      _mostrarError('Por favor completa todos los campos correctamente');
       return;
     }
 
@@ -294,13 +376,21 @@ class _PantallaTareasState extends State<PantallaTareas> {
       fechaCreacion: DateTime.now(),
     );
 
-    setState(() => tareas.add(tarea));
+    setState(() {
+      tareas.add(tarea);
+    });
+
+    // Guardar en JSON
     await AlmacenamientoTareas.guardarTareasJSON(tareas);
+
+    // Limpiar formulario
     _tituloController.clear();
     _descripcionController.clear();
+
     _mostrarExito('Tarea agregada correctamente');
   }
 
+  /// Marcar tarea como completada
   Future<void> _marcarCompletada(int id) async {
     final indice = tareas.indexWhere((t) => t.id == id);
     if (indice == -1) return;
@@ -314,16 +404,23 @@ class _PantallaTareasState extends State<PantallaTareas> {
       fechaCreacion: tareaOriginal.fechaCreacion,
     );
 
-    setState(() => tareas[indice] = tareaEditada);
+    setState(() {
+      tareas[indice] = tareaEditada;
+    });
+
     await AlmacenamientoTareas.guardarTareasJSON(tareas);
   }
 
+  /// Eliminar tarea
   Future<void> _eliminarTarea(int id) async {
-    setState(() => tareas.removeWhere((t) => t.id == id));
+    setState(() {
+      tareas.removeWhere((t) => t.id == id);
+    });
     await AlmacenamientoTareas.guardarTareasJSON(tareas);
     _mostrarExito('Tarea eliminada');
   }
 
+  /// Exportar a CSV
   Future<void> _exportarCSV() async {
     if (tareas.isEmpty) {
       _mostrarError('No hay tareas para exportar');
@@ -338,11 +435,13 @@ class _PantallaTareasState extends State<PantallaTareas> {
     }
   }
 
+  /// Generar reporte
   Future<void> _generarReporte() async {
     await AlmacenamientoTareas.generarReporteTXT(tareas);
     _mostrarExito('Reporte generado');
   }
 
+  /// Mostrar mensaje de error
   void _mostrarError(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -353,6 +452,7 @@ class _PantallaTareasState extends State<PantallaTareas> {
     );
   }
 
+  /// Mostrar mensaje de éxito
   void _mostrarExito(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -367,24 +467,60 @@ class _PantallaTareasState extends State<PantallaTareas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestor de Tareas'),
+        title: const Text('Almacenamiento en Archivos'),
         backgroundColor: Colors.orange[700],
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ========== SECCIÓN DE ENTRADA ==========
             _buildFormulario(),
+
             const SizedBox(height: 30),
+
+            // ========== BOTONES DE EXPORTACIÓN ==========
             _buildBotones(),
+
             const SizedBox(height: 30),
-            tareas.isNotEmpty ? _buildLista() : _buildVacio(),
+
+            // ========== LISTA DE TAREAS ==========
+            if (tareas.isNotEmpty) ...[
+              Text(
+                'Tareas Guardadas (${tareas.length})',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              _buildLista(),
+            ] else ...[
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    'No hay tareas guardadas',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
   }
 
+  /// Widget del formulario
   Widget _buildFormulario() {
     return Card(
       elevation: 2,
@@ -441,6 +577,7 @@ class _PantallaTareasState extends State<PantallaTareas> {
     );
   }
 
+  /// Widget de botones de exportación
   Widget _buildBotones() {
     return Row(
       children: [
@@ -471,6 +608,7 @@ class _PantallaTareasState extends State<PantallaTareas> {
     );
   }
 
+  /// Widget de lista de tareas
   Widget _buildLista() {
     return ListView.builder(
       shrinkWrap: true,
@@ -503,23 +641,11 @@ class _PantallaTareasState extends State<PantallaTareas> {
       },
     );
   }
-
-  Widget _buildVacio() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          'No hay tareas guardadas',
-          style: TextStyle(color: Colors.grey[600], fontSize: 16),
-        ),
-      ),
-    );
-  }
 }
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 4. FUNCIÓN MAIN
+// ═════════════════════════════════════════════════════════════════════════════
 
 void main() {
   runApp(const MiApp());
