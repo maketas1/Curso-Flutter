@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_basicos/widgets_basicos/dia11/archivos_ejemplo.dart';
 import 'package:widget_basicos/widgets_basicos/dia11/hive_ejemplo.dart';
 import 'package:widget_basicos/widgets_basicos/dia11/sqlite_ejemplo.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/my_lesson_header.dart';
@@ -141,21 +142,21 @@ class Dia11Persistencia extends StatelessWidget {
               const SizedBox(height: 20),
 
               /// BOTÓN 4: Archivos Locales (ahora es el último)
-              // _buildNavigationButton(
-              //   context,
-              //   icon: Icons.folder,
-              //   title: 'Archivos Locales',
-              //   description: 'JSON, CSV, TXT - Almacenamiento en archivos',
-              //   color: Colors.orange,
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const PantallaTareas(),
-              //       ),
-              //     );
-              //   },
-              // ),
+              _buildNavigationButton(
+                context,
+                icon: Icons.folder,
+                title: 'Archivos Locales',
+                description: 'JSON, CSV, TXT - Almacenamiento en archivos',
+                color: Colors.orange,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PantallaTareas(),
+                    ),
+                  );
+                },
+              ),
 
               const SizedBox(height: 20),
 
