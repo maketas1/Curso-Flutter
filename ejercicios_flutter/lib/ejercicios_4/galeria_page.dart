@@ -28,15 +28,16 @@ class _GaleriaPageState extends State<GaleriaPage> {
       body: ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return Row(
+          return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 items[index].rutaImagen,
-                height: 408,
+                height: 400,
                 width: 408,
-                
               ),
+              Text(items[index].titulo),
+              Text(items[index].descripcion)
             ],
           );
         }
