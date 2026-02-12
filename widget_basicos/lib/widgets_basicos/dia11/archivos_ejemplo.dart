@@ -69,7 +69,7 @@ class Tarea {
   /// 
   /// 'factory' significa que crea una nueva instancia pero con lógica personalizada
   factory Tarea.fromJson(Map<String, dynamic> json) => Tarea(
-    id: json['id'] as String,
+    id: json['id'],
     titulo: json['titulo'] as String,
     descripcion: json['descripcion'] as String,
     completada: json['completada'] as bool,
@@ -112,17 +112,12 @@ class AlmacenamientoTareas {
     try {
       final dir = await _directorio;
       final archivo = File('${dir.path}/tarea_actual.json');
-
-      if (await archivo.exists()) {
-        return null;
-      }
-
       final contenido = await archivo.readAsString();
       final json = jsonDecode(contenido);
       return Tarea.fromJson(json);
     } catch (e) {
       print('✗ Error leyendo JSON: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -152,7 +147,7 @@ class AlmacenamientoTareas {
       }
 
       final contenido = await archivo.readAsString();
-      final jsonList = jsonDecode(contenido) as String;
+      final jsonList = jsonDecode(contenido);
       return jsonList.map((json) => Tarea.fromJson(json)).toList();
     } catch (e) {
       print('✗ Error leyendo lista JSON: $e');
@@ -226,13 +221,13 @@ class AlmacenamientoTareas {
   }
 
   /// Parsear línea CSV (maneja comillas)
-  static List<String> _parseCSVLine() {
+  static List<String> _parseCSVLine(String linea) {
     final campos = <String>[];
     final buffer = StringBuffer();
     bool entreComillas = false;
 
-    for (int i = 0; i < line.length; i++) {
-      final char = line[i];
+    for (int i = 0; i < linea.length; i++) {
+      final char = linea[i];
 
       if (char == '"') {
         entreComillas = !entreComillas;
