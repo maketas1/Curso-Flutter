@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'paso_1_vibracion.dart';
 import 'paso_2_llamada.dart';
-import 'paso_3_tareas_orden.dart';
-import 'paso_4_compartir.dart';
-import 'paso_5_errores.dart';
-import 'paso_6_paralelo.dart';
-import 'paso_7_bateria.dart';
-import 'paso_8_stream_bateria.dart';
-import 'paso_9_dos_streams.dart';
-import 'paso_10_panel.dart';
+// import 'paso_3_tareas_orden.dart';
+// import 'paso_4_compartir.dart';
+// import 'paso_5_errores.dart';
+// import 'paso_6_paralelo.dart';
+// import 'paso_7_bateria.dart';
+// import 'paso_8_stream_bateria.dart';
+// import 'paso_9_dos_streams.dart';
+// import 'paso_10_panel.dart';
 
 /// PANTALLA PRINCIPAL DEL EJERCICIO
 /// Integra todos los pasos (1-10) en un navegador con scroll
@@ -26,14 +26,14 @@ class _EjercicioAsincroniaMainState extends State<EjercicioAsincroniaMain> {
   static const List<Widget> _pages = <Widget>[
     Paso1Vibracion(),
     Paso2Llamada(),
-    Paso3TareasEnOrden(),
-    Paso4Compartir(),
-    Paso5ManejoErrores(),
-    Paso6AbrirEnParalelo(),
-    Paso7Bateria(),
-    Paso8StreamBateria(),
-    Paso9DosStreamsCombinados(),
-    Paso10PanelControl(),
+    // Paso3TareasEnOrden(),
+    // Paso4Compartir(),
+    // Paso5ManejoErrores(),
+    // Paso6AbrirEnParalelo(),
+    // Paso7Bateria(),
+    // Paso8StreamBateria(),
+    // Paso9DosStreamsCombinados(),
+    // Paso10PanelControl(),
   ];
 
   static const List<String> _titles = <String>[

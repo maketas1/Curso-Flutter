@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widget_basicos/widgets_basicos/dia11/dia_11_persistencia.dart';
 import 'package:widget_basicos/widgets_basicos/dia11/hive_ejemplo.dart';
+import 'package:widget_basicos/widgets_basicos/dia12/ejercicio_12_02/ejercicioAsincronia.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/dia_9_2.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/my_images.dart';
 import 'package:widget_basicos/widgets_basicos/dia9/my_images2.dart';
@@ -238,7 +239,8 @@ class MainApp extends StatelessWidget {
       //   '/images1' : (context) => MyImages2(),
       //   '/listview' : (context) => MiListViewEjemplos()
       // },
-      home: Dia11Persistencia(),
+      // home: Dia11Persistencia(),
+      home: EjercicioAsincroniaMain(),
     );
   }
 }
