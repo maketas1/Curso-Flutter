@@ -12,12 +12,7 @@ class Paso2Llamada extends StatelessWidget {
 
     final Uri url = Uri.parse(
         "https://wa.me/$numero?text=${Uri.encodeComponent(mensaje)}");
-
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      throw "No se pudo abrir WhatsApp";
-    }
+    await launchUrl(url, mode: LaunchMode.externalApplication);
   }
 
   @override
