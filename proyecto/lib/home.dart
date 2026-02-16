@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
 
@@ -27,23 +28,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Start the session.
     NfcManager.instance.startSession(
-      pollingOptions: {NfcPollingOption.iso14443}, // You can also specify iso18092 and iso15693.
+      pollingOptions: {NfcPollingOption.iso14443},
       onDiscovered: (NfcTag tag) async {
-        // Do something with an NfcTag instance...
-        setState(() {
-          prueba1 = tag.toString();
-        });
-
-        // Stop the session when no longer needed.
+        Ndef? ndef = Ndef.from(tag);
+        if (ndef != null) {
+          NdefMessage? message = await ndef.read(); 
+          setState(() {
+            prueba1 = message.toString();
+          });
+        }
+        // setState(() {
+        //   prueba1 = tag.toString();
+        // });
         await NfcManager.instance.stopSession();
       },
     );
-  }
-
-  void leer(NfcTag tag) {
-    Map<String, dynamic> data = {
-      'nfca': tag
-    };
   }
 
   @override
