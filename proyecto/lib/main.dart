@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/home.dart';
 
+/**
+ * Paginas:
+ * https://www.geeksforgeeks.org/flutter/how-to-create-a-nfc-reader-and-writer-flutter-application/
+ */
+
 void main() {
   runApp(const MyApp());
 }

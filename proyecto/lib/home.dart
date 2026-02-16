@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -37,6 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
         await NfcManager.instance.stopSession();
       },
     );
+  }
+
+  void leer(NfcTag tag) {
+    Map<String, dynamic> data = {
+      'nfca': tag
+    };
   }
 
   @override
