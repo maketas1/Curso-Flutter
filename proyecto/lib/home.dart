@@ -154,7 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             Text(errores),
-            Text(texto),
+            Text(
+              texto
+            ),
             ElevatedButton(onPressed: leer, child: Text("Leer")),
             TextField(
               controller: mandar,
