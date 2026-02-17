@@ -18,6 +18,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String texto = "Hola";
   String errores = "Errores";
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   Future<void> leer() async{
     NfcAvailability availability = await NfcManager.instance.checkAvailability();
@@ -40,17 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
         
         setState(() {
           if(message != null) {
-            var rawData = message.records; 
-            // String textData = String.fromCharCodes(rawData[1].payload);
+            var rawData = message.records;
             String textData = "";
             int longitud = rawData.length;
             if(longitud > 1) {
               for(int i = 0; i < longitud; i++) {
-                textData = "Texto$i: ${String.fromCharCodes(rawData[i].payload
-                )}, ";
+                print(rawData.first.payload);
+                textData = "Texto$i: ${String.fromCharCodes(rawData[i].payload).substring(3)}, ";
               }
             } else {
-              textData = String.fromCharCodes(rawData.first.payload);
+              textData = String.fromCharCodes(rawData.first.payload).substring(3);
             }
             texto = textData; 
           } else {
@@ -72,7 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> escribir() async {
-    final text = "Pruebas 1";
+    String text = "Pruebas 1";
+    if(controller.text.isNotEmpty ) {
+      text = controller.text;
+      controller.clear();
+    }
     NfcAvailability availability = await NfcManager.instance.checkAvailability();
 
     if (availability != NfcAvailability.enabled) {
@@ -133,6 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(errores),
             Text(texto),
             ElevatedButton(onPressed: leer, child: Text("Leer")),
+            TextField(
+                controller: controller,
+              ),
             ElevatedButton(onPressed: escribir, child: Text("Escribir")),
           ],
         ),
