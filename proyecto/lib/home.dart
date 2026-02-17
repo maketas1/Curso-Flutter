@@ -18,17 +18,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String texto = "Hola";
   String errores = "Errores";
-  late TextEditingController controller;
+  late TextEditingController mandar;
+  late TextEditingController tipo;
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
+    mandar = TextEditingController();
+    tipo = TextEditingController();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    mandar.dispose();
+    tipo.dispose();
     super.dispose();
   }
 
@@ -83,10 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> escribir() async {
-    String text = "Pruebas 1";
-    if(controller.text.isNotEmpty ) {
-      text = controller.text;
-      controller.clear();
+    String text = "Prueba";
+    String tipo1 = "Mensaje";
+    if(mandar.text.isNotEmpty ) {
+      text = mandar.text;
+      mandar.clear();
+    }
+    if(tipo.text.isNotEmpty ) {
+      tipo1 = tipo.text;
+      tipo.clear();
     }
     NfcAvailability availability = await NfcManager.instance.checkAvailability();
 
@@ -107,10 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
           if (!ndef.isWritable) {
             return;
           }
-
+          String texto = "$tipo1: $text";
           final languageCode = 'es';
           final langBytes = utf8.encode(languageCode);
-          final textBytes = utf8.encode(text);
+          final textBytes = utf8.encode(texto);
           final statusByte = langBytes.length & 0x3F;
 
           final payload = Uint8List.fromList([
@@ -149,8 +157,19 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(texto),
             ElevatedButton(onPressed: leer, child: Text("Leer")),
             TextField(
-                controller: controller,
+              controller: mandar,
+              decoration: InputDecoration(
+                hintText: "Mensaje",
+                border: OutlineInputBorder()
               ),
+            ),
+            TextField(
+              controller: tipo,
+              decoration: InputDecoration(
+                hintText: "Tipo",
+                border: OutlineInputBorder()
+              ),
+            ),
             ElevatedButton(onPressed: escribir, child: Text("Escribir")),
           ],
         ),
