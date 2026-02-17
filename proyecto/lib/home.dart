@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
             int longitud = rawData.length;
             if(longitud > 1) {
               for(int i = 0; i < longitud; i++) {
-                print(rawData.first.payload);
                 textData = "Texto$i: ${String.fromCharCodes(rawData[i].payload).substring(3)}, ";
               }
             } else {
