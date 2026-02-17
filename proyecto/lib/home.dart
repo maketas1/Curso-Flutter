@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
@@ -19,13 +17,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   String texto = "Hola";
+  String errores = "Errores";
 
   Future<void> leer() async{
     NfcAvailability availability = await NfcManager.instance.checkAvailability();
 
     if (availability != NfcAvailability.enabled) {
       setState(() {
-        texto = 'NFC may not be supported or may be temporarily disabled.';
+        errores = 'NFC may not be supported or may be temporarily disabled.';
       });
       return;
     }
@@ -41,20 +40,30 @@ class _MyHomePageState extends State<MyHomePage> {
         
         setState(() {
           if(message != null) {
-            var rawData = message!.records.first.payload; 
-            String textData = String.fromCharCodes(rawData); 
-            texto = textData.substring(3); 
+            var rawData = message.records; 
+            // String textData = String.fromCharCodes(rawData[1].payload);
+            String textData = "";
+            int longitud = rawData.length;
+            if(longitud > 1) {
+              for(int i = 0; i < longitud; i++) {
+                textData = "Texto$i: ${String.fromCharCodes(rawData[i].payload
+                )}, ";
+              }
+            } else {
+              textData = String.fromCharCodes(rawData.first.payload);
+            }
+            texto = textData; 
           } else {
             if(ndef.toString().contains("NdefPlatformAndroid")) {
               texto = "null";
             } else {
-              texto = ndef.toString();
+              errores = ndef.toString();
             }
           } 
         });
       } else {
         setState(() {
-          texto = ndef.toString();
+          errores = ndef.toString();
         });
       }
       NfcManager.instance.stopSession();
@@ -68,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (availability != NfcAvailability.enabled) {
       setState(() {
-        texto = 'NFC may not be supported or may be temporarily disabled.';
+        errores = 'NFC may not be supported or may be temporarily disabled.';
       });
       return;
     }
@@ -78,14 +87,13 @@ class _MyHomePageState extends State<MyHomePage> {
         try {
           final ndef = Ndef.from(tag);
           if (ndef == null) {
-            throw Exception('This tag does not support NDEF');
+            return;
           }
           if (!ndef.isWritable) {
-            throw Exception('This tag is not writable');
+            return;
           }
 
-          // Build an NDEF Text Record (type 'T') using NFC Forum Text RTD
-          final languageCode = 'en';
+          final languageCode = 'es';
           final langBytes = utf8.encode(languageCode);
           final textBytes = utf8.encode(text);
           final statusByte = langBytes.length & 0x3F;
@@ -122,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            Text("prueba"),
+            Text(errores),
             Text(texto),
             ElevatedButton(onPressed: leer, child: Text("Leer")),
             ElevatedButton(onPressed: escribir, child: Text("Escribir")),
