@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -20,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String errores = "Errores";
   late TextEditingController mandar;
   late TextEditingController tipo;
+  String url = "https://github.com/maketas1?tab=repositories";
 
   @override
   void initState() {
@@ -64,7 +66,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 textData = "Texto$i: ${String.fromCharCodes(rawData[i].payload).substring(3)}, ";
               }
             } else {
-              textData = String.fromCharCodes(rawData.first.payload).substring(3);
+              String texto1 = String.fromCharCodes(rawData.first.payload).substring(3);
+                var separado = texto1.split(": ");
+                if(separado.length > 1) {
+                  if(separado[0].toLowerCase() == "enlace") {
+                    var texto2 = texto1.split("enlace: ");
+                    url = texto2[1];
+                    openGoogle();
+                  }
+                } else {
+                  textData = texto1;
+                }
             }
             texto = textData; 
           } else {
@@ -141,6 +153,13 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
     );
+  }
+
+  Future<void> openGoogle() async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
