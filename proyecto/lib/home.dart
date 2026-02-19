@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
@@ -20,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController mandar;
   late TextEditingController tipo;
   String url = "";
+  String tipo2 = "";
 
   @override
   void initState() {
@@ -65,8 +67,22 @@ class _MyHomePageState extends State<MyHomePage> {
         if (content.toLowerCase().startsWith("enlace:")) {
           url = content.replaceFirst("enlace: ", "");
           openGoogle();
+        } else if (content.toLowerCase().startsWith("api:")) {
+          setState(() {
+            errores = "";
+            tipo2 = "api";
+            texto = content.replaceFirst("api: ", "");
+          });
+        } else if (content.toLowerCase().startsWith("texto:")) {
+          setState(() {
+            errores = "";
+            texto = content.replaceFirst("texto: ", "");
+          });
         } else {
-          setState(() => texto = content);
+          setState(() {
+            errores = "";
+            texto = content;
+          });
         }
 
         NfcManager.instance.stopSession();
@@ -109,8 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
             payload: payload,
           );
 
-          await ndef.write(message: NdefMessage(records: [record]));
-          setState(() => texto = "Mensaje escrito correctamente");
+          final message = NdefMessage(records: [record]);
+          await ndef.write(message: message);
+          setState(() {
+            errores = "";
+            tipo2 = "";
+            texto = "Mensaje escrito correctamente";
+          });
         } finally {
           await NfcManager.instance.stopSession();
         }
@@ -122,6 +143,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw Exception("No se pudo abrir el enlace");
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchPokemon() async {
+    String enlace = "https://pokeapi.co/api/v2/pokemon/$texto";
+    print(enlace);
+    final response = await http.get(
+      Uri.parse(enlace),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Error al cargar el Pokémon');
     }
   }
 
@@ -148,6 +183,64 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget pokemon() {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchPokemon(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return const Text(
+            "Error al cargar el Pokémon",
+            style: TextStyle(color: Colors.red),
+          );
+        }
+
+        final pokemon = snapshot.data!;
+        final String name = pokemon['name'];
+        final String sprite = pokemon['sprites']['front_default'];
+        final List types = pokemon['types'];
+        final List stats = pokemon['stats'];
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Image.network(sprite, height: 120),
+            ),
+            const SizedBox(height: 8),
+
+            Text(
+              name.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+            const Text(
+              "Tipos",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            ...types.map((t) => Text(t['type']['name'])),
+
+            const SizedBox(height: 8),
+            const Text(
+              "Estadísticas",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            ...stats.map(
+              (s) => Text("${s['stat']['name']}: ${s['base_stat']}"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _infoCard() {
     return Card(
       elevation: 4,
@@ -161,7 +254,13 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(texto),
+            () {
+              if(tipo2 == "api") {
+                return pokemon();
+              } else {
+                return Text(texto);
+              }
+            }.call(),
             if (errores.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
